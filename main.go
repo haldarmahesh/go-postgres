@@ -14,15 +14,11 @@ func main() {
 	)
 	db := createDbConnection()
 	rows, err := db.Query("SELECT id, name from user_details where id =$1", 1)
-	if err != nil {
-		log.Fatal(err)
-	}
+	logError(err)
 	defer rows.Close()
 	for rows.Next() {
 		err := rows.Scan(&id, &name)
-		if err != nil {
-			log.Fatal(err)
-		}
+		logError(err)
 		fmt.Println(id, name)
 	}
 	db.Close()
@@ -30,8 +26,12 @@ func main() {
 
 func createDbConnection() *sql.DB {
 	db, err := sql.Open("postgres", "host=localhost dbname=dealscore sslmode=disable")
+	logError(err)
+	return db
+}
+
+func logError(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return db
 }
