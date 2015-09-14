@@ -5,7 +5,6 @@ import (
 	"fmt"
 	_ "github.com/lib/pq"
 	"log"
-	"time"
 )
 
 func main() {
@@ -13,11 +12,7 @@ func main() {
 		id   int
 		name string
 	)
-	db, err := sql.Open("postgres", "host=localhost dbname=dealscore sslmode=disable")
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("conected, time is %s", time.Now())
+	db := createDbConnection()
 	rows, err := db.Query("SELECT id, name from user_details where id =$1", 1)
 	if err != nil {
 		log.Fatal(err)
@@ -28,7 +23,15 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		log.Println(id, name)
+		fmt.Println(id, name)
 	}
 	db.Close()
+}
+
+func createDbConnection() *sql.DB {
+	db, err := sql.Open("postgres", "host=localhost dbname=dealscore sslmode=disable")
+	if err != nil {
+		log.Fatal(err)
+	}
+	return db
 }
