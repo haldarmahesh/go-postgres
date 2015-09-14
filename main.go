@@ -13,7 +13,6 @@ func main() {
 		id   int
 		name string
 	)
-	fmt.Println("mahesh")
 	db, err := sql.Open("postgres", "host=localhost dbname=dealscore sslmode=disable")
 	if err != nil {
 		log.Fatal(err)
@@ -23,7 +22,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("success")
 	defer rows.Close()
 	for rows.Next() {
 		err := rows.Scan(&id, &name)
