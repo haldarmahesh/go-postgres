@@ -1,37 +1,32 @@
 package main
 
 import (
-	"database/sql"
-	"fmt"
-	_ "github.com/lib/pq"
-	"log"
+  "fmt"
+  _ "github.com/haldarmahesh/string"
+  _ "github.com/lib/pq"
+  _ "log"
 )
 
+import "github.com/haldarmahesh/dbconnect/database"
 func main() {
-	var (
-		id   int
-		name string
-	)
-	db := createDbConnection()
-	rows, err := db.Query("SELECT id, name from user_details where id =$1", 1)
-	logError(err)
-	defer rows.Close()
-	for rows.Next() {
-		err := rows.Scan(&id, &name)
-		logError(err)
-		fmt.Println(id, name)
-	}
-	db.Close()
-}
-
-func createDbConnection() *sql.DB {
-	db, err := sql.Open("postgres", "host=localhost dbname=dealscore sslmode=disable")
-	logError(err)
-	return db
+  var (
+    id   int
+    name string
+  )
+  db := database.CreateConnection()
+  rows, err := db.Query("SELECT id, name from user_details where id=$1", 1)
+  logError(err)
+  defer rows.Close()
+  for rows.Next() {
+    err := rows.Scan(&id, &name)
+    logError(err)
+    fmt.Println(id, name)
+  }
+  db.Close()
 }
 
 func logError(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
+  if err != nil {
+    panic(err)
+  }
 }
