@@ -23,6 +23,8 @@ func main() {
     fmt.Println(id, name)
   }
   db.Close()
+
+  
 }
 
 func logError(err error) {
