@@ -1,0 +1,6 @@
+{
+  "adapter" : "postgres",
+  "host" : "localhost",
+  "dbname" : "dealscore",
+  "sslmode" : "disable"
+}
