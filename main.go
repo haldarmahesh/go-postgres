@@ -2,8 +2,8 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
-
 	"github.com/haldarmahesh/dbconnect/database"
 	_ "github.com/haldarmahesh/string"
 	_ "github.com/lib/pq"
@@ -25,6 +25,8 @@ func main() {
 		logError(err)
 		fmt.Println(id, name)
 	}
+	name, num := readJson()
+	fmt.Println(name, num)
 	db.Close()
 }
 
@@ -37,4 +39,13 @@ func readRows() *sql.Rows {
 	rows, err := db.Query("SELECT id, name from user_details where id=$1", 1)
 	logError(err)
 	return rows
+}
+func readJson() (string, int) {
+	var data = []byte(`{"status":200, "mahesh" :{"a":12, "b":45}}`)
+	var result map[string]interface{}
+	if err := json.Unmarshal(data, &result); err != nil {
+		fmt.Println("error", err)
+	}
+	fmt.Println("status value: \a", result["mahesh"])
+	return "m123", 10
 }

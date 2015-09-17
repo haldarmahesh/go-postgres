@@ -2,12 +2,11 @@ package database
 
 import (
 	"database/sql"
-	"encoding/json"
-	"fmt"
+	_ "encoding/json"
 	_ "io"
 	_ "io/ioutil"
 	_ "log"
-	"os"
+	_ "os"
 )
 
 type Config struct {
@@ -18,6 +17,9 @@ type Config struct {
 }
 
 func CreateConnection() *sql.DB {
+	/*content, err := io.ioutil.ReadFile("config.json")
+	logError(err)
+	fmt.Println(string(content))*/
 	db, err := sql.Open("postgres", "host=localhost dbname=dealscore sslmode=disable")
 	logError(err)
 	return db
