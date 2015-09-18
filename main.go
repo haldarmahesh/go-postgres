@@ -40,12 +40,34 @@ func readRows() *sql.Rows {
 	logError(err)
 	return rows
 }
+
+type As struct {
+	As int `json:"as"`
+}
+type B1 struct {
+	A  int `json:"a"`
+	B1 As
+}
+type Mahesh1 struct {
+	Mahesh B1
+}
+
 func readJson() (string, int) {
-	var data = []byte(`{"status":200, "mahesh" :{"a":12, "b":45}}`)
-	var result map[string]interface{}
+	var data = []byte(`{"mahesh" :{"a":12, "b1":{"as":123}}}`)
+	/*var result map[string]map[string]interface{}
 	if err := json.Unmarshal(data, &result); err != nil {
 		fmt.Println("error", err)
 	}
-	fmt.Println("status value: \a", result["mahesh"])
+	fmt.Println("status value: \a", result["mahesh"]["a"])
+	*/
+	/*var parsed interface{}
+	err := json.Unmarshal(data, &parsed)
+	logError(err)
+	fmt.Println(parsed[:mahesh])
+	*/
+	var mahi Mahesh1
+	err := json.Unmarshal(data, &mahi)
+	logError(err)
+	fmt.Println(mahi.Mahesh.B1.As)
 	return "m123", 10
 }
