@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"encoding/json"
+	"github.com/haldarmahesh/dbconnect/helper"
 	"io/ioutil"
 	_ "log"
 	"path"
@@ -21,23 +22,17 @@ func CreateConnection() *sql.DB {
 	data := readJsonConfig()
 	configuration := Config{}
 	err := json.Unmarshal(data, &configuration)
-	logError(err)
+	helper.CheckError(err)
 	db, err := sql.Open(configuration.Adapter, "host="+configuration.Host+" dbname="+configuration.Dbname+" sslmode="+configuration.Sslmode)
-	logError(err)
+	helper.CheckError(err)
 	return db
-}
-
-func logError(err error) {
-	if err != nil {
-		panic(err)
-	}
 }
 
 func readJsonConfig() []byte {
 	_, filename1, _, _ := runtime.Caller(1)
 	filename, _ := filepath.Abs(path.Dir(filename1) + "/config.json")
 	jsonFile, err := ioutil.ReadFile(filename)
-	logError(err)
+	helper.CheckError(err)
 	data := []byte(jsonFile)
 	return data
 }
