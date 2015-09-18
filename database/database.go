@@ -2,24 +2,28 @@ package database
 
 import (
 	"database/sql"
-	_ "encoding/json"
-	_ "io"
-	_ "io/ioutil"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	_ "log"
 	_ "os"
+	"path"
+	"path/filepath"
+	"runtime"
 )
 
 type Config struct {
-	adapter string `json:"adapter"`
-	host    string `json:"host"`
-	dbname  string `json:"dbname"`
-	sslmode string `json:"sslmode"`
+	Adapter string `json:"adapter"`
+	Host    string `json:"host"`
+	Dbname  string `json:"dbname"`
+	Sslmode string `json:"sslmode"`
 }
 
 func CreateConnection() *sql.DB {
-	/*content, err := io.ioutil.ReadFile("config.json")
+	data := readJsonConfig()
+	configuration := Config{}
+	err := json.Unmarshal(data, &configuration)
 	logError(err)
-	fmt.Println(string(content))*/
 	db, err := sql.Open("postgres", "host=localhost dbname=dealscore sslmode=disable")
 	logError(err)
 	return db
@@ -29,4 +33,13 @@ func logError(err error) {
 	if err != nil {
 		panic(err)
 	}
+}
+func readJsonConfig() []byte {
+	_, filename1, _, _ := runtime.Caller(1)
+	fmt.Println(path.Dir(filename1), "$$")
+	filename, _ := filepath.Abs(path.Dir(filename1) + "/config.json")
+	jsonFile, err := ioutil.ReadFile(filename)
+	logError(err)
+	data := []byte(jsonFile)
+	return data
 }

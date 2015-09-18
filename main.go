@@ -7,6 +7,7 @@ import (
 	"github.com/haldarmahesh/dbconnect/database"
 	_ "github.com/haldarmahesh/string"
 	_ "github.com/lib/pq"
+	"io/ioutil"
 	_ "log"
 )
 
@@ -68,6 +69,13 @@ func readJson() (string, int) {
 	var mahi Mahesh1
 	err := json.Unmarshal(data, &mahi)
 	logError(err)
-	fmt.Println(mahi.Mahesh.B1.As)
+	fmt.Println(mahi.Mahesh.B1)
+	readDir()
 	return "m123", 10
+}
+func readDir() {
+	files, _ := ioutil.ReadDir("./")
+	for _, f := range files {
+		fmt.Println(f.Name(), " &&")
+	}
 }
