@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"github.com/haldarmahesh/dbconnect/helper"
 	"io/ioutil"
-	_ "log"
 	"path"
 	"path/filepath"
 	"runtime"
@@ -19,9 +18,8 @@ type Config struct {
 }
 
 func CreateConnection() *sql.DB {
-	data := readJsonConfig()
 	configuration := Config{}
-	err := json.Unmarshal(data, &configuration)
+	err := json.Unmarshal(readJsonConfig(), &configuration)
 	helper.CheckError(err)
 	db, err := sql.Open(configuration.Adapter, "host="+configuration.Host+" dbname="+configuration.Dbname+" sslmode="+configuration.Sslmode)
 	helper.CheckError(err)
